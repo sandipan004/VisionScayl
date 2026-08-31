@@ -1,0 +1,27 @@
+# Virtual environments
+.visionscayl/
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary & Output files
+results/
+LR/
+*.tmp
+*.log
+
+# OS generated
+.DS_Store
+Thumbs.db

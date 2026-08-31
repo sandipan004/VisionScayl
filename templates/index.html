@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionScayl - Image Upscaler</title>
+    <link rel="stylesheet" href="/static/css/index.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🌟 VisionScayl</h1>
+            <p>AI-Powered Image Upscaler for Stunning Results</p>
+        </div>
+    </header>
+    <main>
+        <div class="card upload-card">
+            <h2>Upload Your Image</h2>
+            <form method="POST" action="/" enctype="multipart/form-data" class="upload-form">
+                <div class="form-group">
+                    <input type="file" name="file" id="file-input" accept="image/*" required>
+                </div>
+                <button type="submit" class="btn-upload">Upscale Now</button>
+            </form>
+        </div>
+
+        {% if error_message %}
+        <div class="card error-card" style="border: 1px solid #ef4444; background: #fee2e2; color: #991b1b; padding: 1rem; border-radius: 8px; margin: 1rem auto; max-width: 600px; text-align: center;">
+            <p><strong>⚠️ Error:</strong> {{ error_message }}</p>
+        </div>
+        {% endif %}
+
+        {% if img_data %}
+        <div class="card output-card">
+            <h2>Upscaled Image</h2>
+            <div class="image-preview">
+                <img class="opImg" src="data:image/jpeg;base64,{{ img_data }}" alt="Upscaled Image">
+            </div>
+            <a href="download" class="btn-download" download="output_image.jpg">Download Image</a>
+        </div>
+        {% endif %}
+    </main>
+    <footer>
+        <p>© 2024 VisionScayl.</p>
+    </footer>
+</body>
+</html>
