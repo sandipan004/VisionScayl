@@ -185,15 +185,17 @@ def process_image(image_bytes: bytes):
     return base64_str, raw_bytes
 
 
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "HEAD"])
 async def health_check():
-    """Health check endpoint for cloud load balancers."""
+    """Health check endpoint for cloud load balancers and Render pings."""
     return {"status": "ok", "model_ready": model is not None}
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.api_route("/", methods=["GET", "HEAD"], response_class=HTMLResponse)
 async def index(request: Request):
-    """Render main homepage."""
+    """Render main homepage (supports HEAD for cloud health probes)."""
+    if request.method == "HEAD":
+        return Response(status_code=200)
     return templates.TemplateResponse(
         request=request,
         name="index.html",
