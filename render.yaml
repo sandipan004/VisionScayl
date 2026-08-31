@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: visionscayl
-    runtime: python
-    buildCommand: "pip install --no-cache-dir -r requirements.txt && curl -L -A 'Mozilla/5.0' https://huggingface.co/databuzzword/esrgan/resolve/main/RRDB_ESRGAN_x4.pth -o RRDB_ESRGAN_x4.pth"
-    startCommand: "gunicorn -w 1 -k uvicorn.workers.UvicornWorker --timeout 120 -b 0.0.0.0:$PORT app:app"
-    envVars:
-      - key: PYTHON_VERSION
-        value: "3.11.9"
