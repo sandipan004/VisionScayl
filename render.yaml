@@ -2,7 +2,7 @@ services:
   - type: web
     name: visionscayl
     runtime: python
-    buildCommand: "pip install --no-cache-dir -r requirements.txt"
+    buildCommand: "pip install --no-cache-dir -r requirements.txt && curl -L -A 'Mozilla/5.0' https://huggingface.co/databuzzword/esrgan/resolve/main/RRDB_ESRGAN_x4.pth -o RRDB_ESRGAN_x4.pth"
     startCommand: "uvicorn app:app --host 0.0.0.0 --port $PORT"
     envVars:
       - key: PYTHON_VERSION

@@ -41,8 +41,17 @@ def load_model():
     # Check if file is missing or just an LFS pointer (<100KB)
     if not os.path.exists(model_path) or os.path.getsize(model_path) < 100000:
         try:
-            print(f"[INFO] Downloading ESRGAN weights (~67 MB) from Hugging Face...")
-            urllib.request.urlretrieve(MODEL_URL, model_path)
+            print("[INFO] Downloading ESRGAN weights (~67 MB) from Hugging Face...")
+            req = urllib.request.Request(
+                MODEL_URL,
+                headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+            )
+            with urllib.request.urlopen(req, timeout=120) as response, open(model_path, "wb") as out_file:
+                while True:
+                    chunk = response.read(1024 * 1024)
+                    if not chunk:
+                        break
+                    out_file.write(chunk)
             print("[INFO] Model weights downloaded successfully.")
         except Exception as e:
             model_load_error = f"Failed to auto-download model weights: {str(e)}"
@@ -238,5 +247,5 @@ async def api_upscale(file: UploadFile = File(...)):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    host = os.environ.get("HOST", "127.0.0.1")
+    host = os.environ.get("HOST", "0.0.0.0")
     uvicorn.run("app:app", host=host, port=port, reload=True)
