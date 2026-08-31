@@ -1,6 +1,7 @@
 import os
 import io
 import base64
+from pathlib import Path
 import cv2
 import numpy as np
 import torch
@@ -14,15 +15,21 @@ import RRDBNet_arch as arch
 
 app = FastAPI(title="VisionScayl - ESRGAN Image Upscaler")
 
+# Base directory for absolute path resolution across all environments (Render / Local)
+BASE_DIR = Path(__file__).resolve().parent
+STATIC_DIR = BASE_DIR / "static"
+TEMPLATES_DIR = BASE_DIR / "templates"
+MODEL_PATH = str(BASE_DIR / "RRDB_ESRGAN_x4.pth")
+
 # Mount static files and setup templates
-os.makedirs("static", exist_ok=True)
-os.makedirs("templates", exist_ok=True)
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+os.makedirs(STATIC_DIR, exist_ok=True)
+os.makedirs(TEMPLATES_DIR, exist_ok=True)
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model_path = 'RRDB_ESRGAN_x4.pth'
+model_path = MODEL_PATH
 model = None
 model_load_error = None
 
