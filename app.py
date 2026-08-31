@@ -73,13 +73,9 @@ def load_model():
         return None
 
 
-# Attempt initial model load
-load_model()
-
-
 def tile_process(img_tensor: torch.Tensor, net_model: torch.nn.Module, scale: int = 4, tile_size: int = 384, tile_pad: int = 16, dev: torch.device = device):
     """
-    Process image in overlapping tiles to prevent CUDA Out-Of-Memory (OOM) on GPUs with <= 4GB VRAM.
+    Process image in overlapping tiles to prevent Out-Of-Memory (OOM).
     Seamlessly merges tiles with padding to prevent boundary artifacts.
     """
     b, c, h, w = img_tensor.shape
@@ -150,12 +146,12 @@ def process_image(image_bytes: bytes):
         torch.cuda.empty_cache()
 
     try:
-        # Attempt GPU/configured device inference using tiled processing
+        # Attempt inference using tiled processing
         with torch.inference_mode():
             output_tensor = tile_process(img_lr, model, scale=4, tile_size=384, tile_pad=16, dev=device)
     except (torch.cuda.OutOfMemoryError if hasattr(torch.cuda, 'OutOfMemoryError') else RuntimeError, RuntimeError) as e:
         if "out of memory" in str(e).lower() or "oom" in str(e).lower() or (hasattr(torch.cuda, 'OutOfMemoryError') and isinstance(e, torch.cuda.OutOfMemoryError)):
-            print("[WARNING] CUDA Out of Memory on GPU. Clearing cache and falling back to CPU...")
+            print("[WARNING] Out of Memory on GPU. Clearing cache and falling back to CPU...")
             if torch.cuda.is_available():
                 torch.cuda.empty_cache()
             # Fallback to CPU execution
@@ -182,14 +178,19 @@ def process_image(image_bytes: bytes):
     return base64_str, raw_bytes
 
 
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for cloud load balancers."""
+    return {"status": "ok", "model_ready": model is not None}
+
+
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     """Render main homepage."""
-    warning = model_load_error if model is None else None
     return templates.TemplateResponse(
         request=request,
         name="index.html",
-        context={"img_data": None, "error_message": warning}
+        context={"img_data": None, "error_message": None}
     )
 
 
@@ -248,4 +249,5 @@ async def api_upscale(file: UploadFile = File(...)):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     host = os.environ.get("HOST", "0.0.0.0")
-    uvicorn.run("app:app", host=host, port=port, reload=True)
+    is_dev = os.environ.get("ENV") == "development"
+    uvicorn.run("app:app", host=host, port=port, reload=is_dev)
