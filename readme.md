@@ -38,7 +38,7 @@
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/SandipanDafadar/VisionScayl.git
+git clone https://github.com/sandipan004/VisionScayl.git
 cd VisionScayl
 ```
 
