@@ -30,22 +30,24 @@ model_load_error = None
 latest_output_image_bytes = None
 
 
-def load_model():
-    """Load the ESRGAN model weights if available."""
-    global model, model_load_error
-    if not os.path.exists(model_path):
-        model_load_error = f"Model weights file '{model_path}' not found."
-        print(f"[WARNING] {model_load_error}")
-        return None
+MODEL_URL = "https://huggingface.co/databuzzword/esrgan/resolve/main/RRDB_ESRGAN_x4.pth"
 
-    if os.path.getsize(model_path) < 100000:
-        # Detected Git LFS pointer text file (~133 bytes) instead of the real ~67MB checkpoint
-        model_load_error = (
-            f"'{model_path}' is a Git LFS pointer file (~{os.path.getsize(model_path)} bytes), "
-            "not the full weights (~67 MB). Please download the actual weights."
-        )
-        print(f"[WARNING] {model_load_error}")
-        return None
+
+def load_model():
+    """Load the ESRGAN model weights, automatically downloading them if missing or LFS pointer."""
+    global model, model_load_error
+    import urllib.request
+
+    # Check if file is missing or just an LFS pointer (<100KB)
+    if not os.path.exists(model_path) or os.path.getsize(model_path) < 100000:
+        try:
+            print(f"[INFO] Downloading ESRGAN weights (~67 MB) from Hugging Face...")
+            urllib.request.urlretrieve(MODEL_URL, model_path)
+            print("[INFO] Model weights downloaded successfully.")
+        except Exception as e:
+            model_load_error = f"Failed to auto-download model weights: {str(e)}"
+            print(f"[ERROR] {model_load_error}")
+            return None
 
     try:
         net = arch.RRDBNet(3, 3, 64, 23, gc=32)
