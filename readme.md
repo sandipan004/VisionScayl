@@ -1,4 +1,4 @@
-# 🌟 VisionScayl — AI-Powered Image Super-Resolution
+# 1. VisionScayl — AI-Powered Image Super-Resolution
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688.svg)](https://fastapi.tiangolo.com/)
@@ -12,7 +12,7 @@
 
 ---
 
-## ✨ Features
+## 2. Features
 
 - 🖼️ **4x AI Super-Resolution:** Sharpens, enhances, and upscales low-resolution images by 400% using ESRGAN's deep RRDBNet architecture.
 - ⚡ **FastAPI & Uvicorn ASGI:** High-throughput, modern asynchronous backend with fast response times.
@@ -33,7 +33,7 @@
 
 ---
 
-## 🚀 Quickstart & Installation
+## 3. Quickstart & Installation
 
 ### 1. Clone the Repository
 
@@ -91,7 +91,7 @@ Open your browser and navigate to:
 
 ---
 
-## 🔌 Programmatic REST API
+## 4. Programmatic REST API
 
 VisionScayl provides a direct REST API endpoint for automated upscaling workflows:
 
@@ -117,7 +117,7 @@ with open("output_4x.jpg", "wb") as f:
 
 ---
 
-## 🎨 How to Use Web Interface
+## 5. How to Use Web Interface
 
 1. Open [http://127.0.0.1:5000/](http://127.0.0.1:5000/) in your browser.
 2. Click **Choose File** to select your low-resolution image (`.jpg`, `.png`, `.webp`).
