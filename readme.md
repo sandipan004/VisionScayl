@@ -81,13 +81,28 @@ curl -L "https://huggingface.co/databuzzword/esrgan/resolve/main/RRDB_ESRGAN_x4.
 
 ### 5. Run the Application
 
+#### Option A: Streamlit Interactive Web App (Recommended for UI & Batching)
+
+```bash
+streamlit run streamlit_app.py
+```
+*Or on Windows, simply double-click `run_streamlit.bat`.*
+
+Navigate to:
+- **Streamlit Web UI:** [http://localhost:8501](http://localhost:8501)
+  - ⚡ **Single Image Upscaling:** Live progress tracking, interactive side-by-side comparison, and detail difference heatmap.
+  - 📦 **Batch Upscaling:** Queue multiple images and download all 4x results in a single ZIP archive.
+  - 🎨 **Post-Processing Filters:** Custom clarity unsharp-masking, contrast & brightness tuning, and PNG/JPEG/WEBP format selectors.
+
+#### Option B: FastAPI Backend & REST Server
+
 ```bash
 python app.py
 ```
 
-Open your browser and navigate to:
-- **Web UI:** [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
-- **Interactive API Docs:** [http://127.0.0.1:5000/docs](http://127.0.0.1:5000/docs)
+Navigate to:
+- **FastAPI Web UI:** [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
+- **Interactive OpenAPI Docs:** [http://127.0.0.1:5000/docs](http://127.0.0.1:5000/docs)
 
 ---
 
